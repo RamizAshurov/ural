@@ -1,11 +1,11 @@
 import { Route, Routes } from 'react-router-dom'
-import Home from './pages/Home.jsx'
+import SearchPage from './pages/SearchPage.jsx'
 import NotFound from './pages/NotFound.jsx'
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<SearchPage />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

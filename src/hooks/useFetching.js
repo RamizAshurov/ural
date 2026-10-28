@@ -6,7 +6,7 @@ export function useFetching(callback) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const fetching = useCallback(
+  const fetchData = useCallback(
     async (...args) => {
       setIsLoading(true)
       setError(null)
@@ -26,5 +26,5 @@ export function useFetching(callback) {
     [callback],
   )
 
-  return { fetching, isLoading, error, data }
+  return { fetchData, isLoading, error, data }
 }

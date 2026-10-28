@@ -1,0 +1,34 @@
+.option,
+.active {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+}
+
+.active {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.brand {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.name {
+  font-size: 14px;
+  color: var(--text);
+}
