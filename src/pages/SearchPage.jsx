@@ -1,61 +1,26 @@
 import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { PageContainer } from '@shared/components'
-import { SearchForm } from '@modules/search'
-import { Manufacturers } from '@modules/manufacturer'
-import { Products } from '@modules/product'
-import { useDebounce, useFetching } from '@shared/hooks'
-import { fetchAnalogues, fetchManufacturers } from '@api/service.js'
+import { MIN_QUERY_LENGTH, SearchForm } from '@modules/search'
+import { useDebounce } from '@shared/hooks'
+import SearchResults from './SearchResults.jsx'
 import styles from './SearchPage.module.scss'
 
-const MIN_QUERY_LENGTH = 3
-
 function SearchPage() {
-  const [search, setSearch] = useState('')
-  const [selectedBrand, setSelectedBrand] = useState(null)
-  const debouncedSearch = useDebounce(search)
-
-  const {
-    fetchData: searchManufacturers,
-    isLoading: isLoadingManufacturers,
-    error: manufacturersError,
-    data: manufacturersData,
-  } = useFetching(fetchManufacturers)
-  const {
-    fetchData: searchAnalogues,
-    isLoading: isLoadingAnalogues,
-    error: analoguesError,
-    data: analoguesData,
-  } = useFetching(fetchAnalogues)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [search, setSearch] = useState(() => searchParams.get('q') ?? '')
+  const query = useDebounce(search).trim()
 
   useEffect(() => {
-    const trimmed = debouncedSearch.trim()
-    if (trimmed.length < MIN_QUERY_LENGTH) return
-    searchManufacturers(trimmed)
-  }, [debouncedSearch, searchManufacturers])
-
-  function handleSelectBrand(brand) {
-    setSelectedBrand(brand)
-    searchAnalogues(debouncedSearch.trim(), brand)
-  }
+    if ((searchParams.get('q') ?? '') === query) return
+    setSearchParams(query ? { q: query } : {}, { replace: true })
+  }, [query, searchParams, setSearchParams])
 
   return (
     <PageContainer>
       <h1 className={styles.title}>Поиск автозапчастей и аналогов</h1>
       <SearchForm value={search} onChange={setSearch} />
-      <Manufacturers
-        isLoading={isLoadingManufacturers}
-        error={manufacturersError}
-        data={manufacturersData}
-        search={debouncedSearch.trim()}
-        selectedBrand={selectedBrand}
-        onSelect={handleSelectBrand}
-      />
-      <Products
-        isLoading={isLoadingAnalogues}
-        error={analoguesError}
-        data={analoguesData}
-        brand={selectedBrand}
-      />
+      {query.length >= MIN_QUERY_LENGTH && <SearchResults key={query} query={query} />}
     </PageContainer>
   )
 }

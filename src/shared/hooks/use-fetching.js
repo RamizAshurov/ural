@@ -1,30 +1,37 @@
-import axios from 'axios'
-import { useCallback, useState } from 'react'
+import axios from "axios";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useFetching(callback) {
-  const [data, setData] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const controllerRef = useRef(null);
 
   const fetchData = useCallback(
     async (...args) => {
-      setIsLoading(true)
-      setError(null)
+      controllerRef.current?.abort();
+      const controller = new AbortController();
+      controllerRef.current = controller;
+
+      setIsLoading(true);
+      setError(null);
 
       try {
-        const result = await callback(...args)
-        setData(result)
-        return result
+        const result = await callback(...args, { signal: controller.signal });
+        if (!controller.signal.aborted) setData(result);
+        return result;
       } catch (err) {
-        if (!axios.isCancel(err)) {
-          setError(err)
+        if (!controller.signal.aborted && !axios.isCancel(err)) {
+          setError(err);
         }
       } finally {
-        setIsLoading(false)
+        if (controllerRef.current === controller) setIsLoading(false);
       }
     },
     [callback],
-  )
+  );
 
-  return { fetchData, isLoading, error, data }
+  useEffect(() => () => controllerRef.current?.abort(), []);
+
+  return { fetchData, isLoading, error, data };
 }

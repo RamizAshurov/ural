@@ -1,6 +1,6 @@
 import styles from './main.module.scss'
 
-const MIN_QUERY_LENGTH = 3
+export const MIN_QUERY_LENGTH = 3
 
 export function Main({ value, onChange }) {
   return (

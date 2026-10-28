@@ -1,1 +1,1 @@
-export { Main as SearchForm } from './ui/main'
+export { Main as SearchForm, MIN_QUERY_LENGTH } from './ui/main'
