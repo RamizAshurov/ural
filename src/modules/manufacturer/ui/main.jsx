@@ -10,7 +10,7 @@ export function Main({ isLoading, error, data, search, selectedBrand, onSelect }
       </p>
     )
   }
-  if (error) return <p className={styles.error}>{error.message}</p>
+  if (error) return <p className={styles.error}>{error}</p>
   if (!data) return null
   if (data.length === 0) return <p>Ничего не найдено по артикулу «{search}»</p>
 

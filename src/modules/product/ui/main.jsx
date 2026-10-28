@@ -10,7 +10,7 @@ export function Main({ isLoading, error, data, brand }) {
       </p>
     )
   }
-  if (error) return <p className={styles.error}>{error.message}</p>
+  if (error) return <p className={styles.error}>{error}</p>
   if (!data) return null
   if (data.length === 0) return <p>Для производителя «{brand}» предложений не найдено</p>
 
