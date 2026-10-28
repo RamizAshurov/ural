@@ -19,7 +19,7 @@ function getErrorMessage(error) {
   return `Сервер вернул ошибку (HTTP ${error.response.status})`
 }
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 10000,
 })
@@ -41,5 +41,3 @@ axiosInstance.interceptors.response.use(undefined, (error) => {
   if (axios.isCancel(error)) return Promise.reject(error)
   return Promise.reject(new Error(getErrorMessage(error), { cause: error }))
 })
-
-export default axiosInstance

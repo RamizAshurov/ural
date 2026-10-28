@@ -1,4 +1,4 @@
-import axiosInstance from './client.js'
+import { axiosInstance } from './axios-instance.js'
 
 // Если ничего не найдено, API отдаёт не пустой список, а заглушку с нулевым goodsID
 const EMPTY_GOODS_ID = '00000000-0000-0000-0000-000000000000'

@@ -9,14 +9,18 @@ import {
   loadAnalogues,
   loadManufacturers,
   resetSearch,
-  selectSearch,
+  selectAnalogues,
+  selectManufacturers,
+  selectSelectedBrand,
 } from '@modules/search'
 import { useDebounce } from '@shared/hooks'
 import styles from './search-page.module.scss'
 
 export function SearchPage() {
   const dispatch = useDispatch()
-  const { selectedBrand, manufacturers, analogues } = useSelector(selectSearch)
+  const selectedBrand = useSelector(selectSelectedBrand)
+  const manufacturers = useSelector(selectManufacturers)
+  const analogues = useSelector(selectAnalogues)
   const [searchParams, setSearchParams] = useSearchParams()
   const [search, setSearch] = useState(() => searchParams.get('q') ?? '')
   const query = useDebounce(search.trim())
@@ -40,7 +44,7 @@ export function SearchPage() {
   }, [query, dispatch])
 
   function handleSelectBrand(brand) {
-    if (brand === selectedBrand && !analogues.error) return
+    if (brand === selectedBrand && analogues.status !== 'failed') return
     analoguesRequest.current?.abort()
     analoguesRequest.current = dispatch(loadAnalogues({ query, brand }))
   }
@@ -55,7 +59,7 @@ export function SearchPage() {
       </header>
       <SearchForm value={search} onChange={setSearch} />
       <ManufacturerList
-        isLoading={manufacturers.isLoading}
+        status={manufacturers.status}
         error={manufacturers.error}
         data={manufacturers.data}
         query={query}
@@ -63,7 +67,7 @@ export function SearchPage() {
         onSelect={handleSelectBrand}
       />
       <ProductList
-        isLoading={analogues.isLoading}
+        status={analogues.status}
         error={analogues.error}
         data={analogues.data}
         brand={selectedBrand}

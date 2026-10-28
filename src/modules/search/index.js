@@ -4,5 +4,7 @@ export {
   loadManufacturers,
   resetSearch,
   searchReducer,
-  selectSearch,
+  selectAnalogues,
+  selectManufacturers,
+  selectSelectedBrand,
 } from './model/slice'

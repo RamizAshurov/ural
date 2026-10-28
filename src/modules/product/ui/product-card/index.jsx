@@ -1,12 +1,10 @@
 import styles from './product-card.module.scss'
 
-function formatPrice(price) {
-  return price.toLocaleString('ru-RU', {
-    style: 'currency',
-    currency: 'RUB',
-    maximumFractionDigits: 2,
-  })
-}
+const priceFormatter = new Intl.NumberFormat('ru-RU', {
+  style: 'currency',
+  currency: 'RUB',
+  maximumFractionDigits: 2,
+})
 
 export function ProductCard({ brand, name, price, count }) {
   const hasPrice = price > 0
@@ -23,7 +21,7 @@ export function ProductCard({ brand, name, price, count }) {
           {inStock ? `В наличии: ${count}` : 'Нет в наличии'}
         </span>
         <span className={hasPrice ? styles.price : styles.noPrice}>
-          {hasPrice ? formatPrice(price) : 'Цена по запросу'}
+          {hasPrice ? priceFormatter.format(price) : 'Цена по запросу'}
         </span>
       </div>
     </div>

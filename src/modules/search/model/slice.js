@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { fetchAnalogues, fetchManufacturers } from '@api/service.js'
 
-const idleRequest = { data: null, isLoading: false, error: null, requestId: null }
+// status: 'idle' | 'loading' | 'succeeded' | 'failed'
+const idleRequest = { status: 'idle', data: null, error: null, requestId: null }
 
 const initialState = {
   selectedBrand: null,
@@ -19,10 +20,26 @@ export const loadAnalogues = createAsyncThunk(
   ({ query, brand }, { signal }) => fetchAnalogues(query, brand, { signal }),
 )
 
-const loadingRequest = (requestId) => ({ ...idleRequest, isLoading: true, requestId })
+const loadingRequest = (requestId) => ({ ...idleRequest, status: 'loading', requestId })
 
-// ответ устарел, если запрос отменён или после него стартовал новый (или был сброс)
-const isStale = (request, meta) => meta.aborted || meta.requestId !== request.requestId
+// ответ устарел, если после запроса стартовал новый (или был сброс)
+const isStale = (request, meta) => meta.requestId !== request.requestId
+
+function addSettledCases(builder, thunk, key) {
+  builder
+    .addCase(thunk.fulfilled, (state, { meta, payload }) => {
+      if (isStale(state[key], meta)) return
+      state[key].status = 'succeeded'
+      state[key].data = payload
+    })
+    .addCase(thunk.rejected, (state, { meta, error }) => {
+      if (isStale(state[key], meta)) return
+      // отменён без замены (уход со страницы) — возвращаемся в idle, а не висим в loading
+      state[key] = meta.aborted
+        ? idleRequest
+        : { ...state[key], status: 'failed', error: error.message }
+    })
+}
 
 const searchSlice = createSlice({
   name: 'search',
@@ -36,33 +53,20 @@ const searchSlice = createSlice({
         ...initialState,
         manufacturers: loadingRequest(meta.requestId),
       }))
-      .addCase(loadManufacturers.fulfilled, (state, { meta, payload }) => {
-        if (isStale(state.manufacturers, meta)) return
-        state.manufacturers.isLoading = false
-        state.manufacturers.data = payload
-      })
-      .addCase(loadManufacturers.rejected, (state, { meta, error }) => {
-        if (isStale(state.manufacturers, meta)) return
-        state.manufacturers.isLoading = false
-        state.manufacturers.error = error.message
-      })
       .addCase(loadAnalogues.pending, (state, { meta }) => {
         state.selectedBrand = meta.arg.brand
         state.analogues = loadingRequest(meta.requestId)
       })
-      .addCase(loadAnalogues.fulfilled, (state, { meta, payload }) => {
-        if (isStale(state.analogues, meta)) return
-        state.analogues.isLoading = false
-        state.analogues.data = payload
-      })
-      .addCase(loadAnalogues.rejected, (state, { meta, error }) => {
-        if (isStale(state.analogues, meta)) return
-        state.analogues.isLoading = false
-        state.analogues.error = error.message
-      })
+    addSettledCases(builder, loadManufacturers, 'manufacturers')
+    addSettledCases(builder, loadAnalogues, 'analogues')
+  },
+  selectors: {
+    selectSelectedBrand: (state) => state.selectedBrand,
+    selectManufacturers: (state) => state.manufacturers,
+    selectAnalogues: (state) => state.analogues,
   },
 })
 
 export const { resetSearch } = searchSlice.actions
+export const { selectAnalogues, selectManufacturers, selectSelectedBrand } = searchSlice.selectors
 export const searchReducer = searchSlice.reducer
-export const selectSearch = (state) => state.search

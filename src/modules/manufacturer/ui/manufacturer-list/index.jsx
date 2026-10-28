@@ -2,10 +2,10 @@ import { EmptyState, ErrorMessage, Loader, Section } from '@shared/components'
 import { ManufacturerCard } from '../manufacturer-card'
 import styles from './manufacturer-list.module.scss'
 
-export function ManufacturerList({ isLoading, error, data, query, selectedBrand, onSelect }) {
-  if (isLoading) return <Loader>Ищем производителей…</Loader>
-  if (error) return <ErrorMessage>{error}</ErrorMessage>
-  if (!data) return null
+export function ManufacturerList({ status, error, data, query, selectedBrand, onSelect }) {
+  if (status === 'loading') return <Loader>Ищем производителей…</Loader>
+  if (status === 'failed') return <ErrorMessage>{error}</ErrorMessage>
+  if (status !== 'succeeded') return null
   if (data.length === 0) return <EmptyState>Ничего не найдено по артикулу «{query}»</EmptyState>
 
   return (
