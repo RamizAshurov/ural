@@ -1,0 +1,7 @@
+.error {
+  padding: 14px 16px;
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+  color: color-mix(in srgb, var(--danger), black 15%);
+}

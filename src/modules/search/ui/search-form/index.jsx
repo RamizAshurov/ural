@@ -1,8 +1,8 @@
-import styles from './main.module.scss'
+import styles from './search-form.module.scss'
 
 export const MIN_QUERY_LENGTH = 3
 
-export function Main({ value, onChange }) {
+export function SearchForm({ value, onChange }) {
   return (
     <form className={styles.form} onSubmit={(event) => event.preventDefault()}>
       <label htmlFor="article" className={styles.label}>

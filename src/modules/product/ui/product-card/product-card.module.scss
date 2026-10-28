@@ -1,0 +1,81 @@
+.card {
+  container-type: inline-size;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding: 16px 20px;
+}
+
+.info {
+  display: flex;
+  flex: 1 1 240px;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.brand {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.name {
+  font-size: 15px;
+}
+
+.offer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+// одинаковая ширина выстраивает цены в ровную колонку по правому краю
+.price,
+.noPrice {
+  min-width: 120px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+// узкая карточка: предложение уходит под название, бейдж слева, цена справа
+@container (max-width: 600px) {
+  .offer {
+    flex-basis: 100%;
+    justify-content: space-between;
+  }
+
+  .price,
+  .noPrice {
+    min-width: 0;
+  }
+}
+
+.price {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-h);
+}
+
+.noPrice {
+  font-size: 15px;
+}
+
+.inStock,
+.outOfStock {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.inStock {
+  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: var(--success);
+}
+
+.outOfStock {
+  background: color-mix(in srgb, var(--text) 10%, transparent);
+}

@@ -1,4 +1,4 @@
-export { Main as SearchForm, MIN_QUERY_LENGTH } from './ui/main'
+export { MIN_QUERY_LENGTH, SearchForm } from './ui/search-form'
 export {
   loadAnalogues,
   loadManufacturers,

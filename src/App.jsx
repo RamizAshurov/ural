@@ -1,14 +1,15 @@
 import { Route, Routes } from 'react-router-dom'
-import SearchPage from './pages/SearchPage.jsx'
-import NotFound from './pages/NotFound.jsx'
+import { NotFound } from '@pages/not-found'
+import { SearchPage } from '@pages/search-page'
+import { PageContainer } from '@shared/components'
 
-function App() {
+export function App() {
   return (
-    <Routes>
-      <Route path="/" element={<SearchPage />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <PageContainer>
+      <Routes>
+        <Route path="/" element={<SearchPage />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </PageContainer>
   )
 }
-
-export default App

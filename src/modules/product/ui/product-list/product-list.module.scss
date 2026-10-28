@@ -1,0 +1,11 @@
+.list {
+  list-style: none;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+
+  & > li + li {
+    border-top: 1px solid var(--border);
+  }
+}

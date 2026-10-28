@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title {
+  font-size: clamp(32px, 3vw + 18px, 48px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-h);
+  text-wrap: balance;
+}
+
+.lead {
+  max-width: 60ch;
+  text-wrap: pretty;
+}

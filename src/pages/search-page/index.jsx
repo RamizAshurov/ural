@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
-import { PageContainer } from '@shared/components'
-import { Manufacturers } from '@modules/manufacturer'
-import { Products } from '@modules/product'
+import { ManufacturerList } from '@modules/manufacturer'
+import { ProductList } from '@modules/product'
 import {
   MIN_QUERY_LENGTH,
   SearchForm,
@@ -13,9 +12,9 @@ import {
   selectSearch,
 } from '@modules/search'
 import { useDebounce } from '@shared/hooks'
-import styles from './SearchPage.module.scss'
+import styles from './search-page.module.scss'
 
-function SearchPage() {
+export function SearchPage() {
   const dispatch = useDispatch()
   const { selectedBrand, manufacturers, analogues } = useSelector(selectSearch)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -47,25 +46,28 @@ function SearchPage() {
   }
 
   return (
-    <PageContainer>
-      <h1 className={styles.title}>Поиск автозапчастей и аналогов</h1>
+    <>
+      <header className={styles.header}>
+        <h1 className={styles.title}>Поиск автозапчастей и аналогов</h1>
+        <p className={styles.lead}>
+          Введите артикул, выберите производителя — покажем цены, наличие и аналоги
+        </p>
+      </header>
       <SearchForm value={search} onChange={setSearch} />
-      <Manufacturers
+      <ManufacturerList
         isLoading={manufacturers.isLoading}
         error={manufacturers.error}
         data={manufacturers.data}
-        search={query}
+        query={query}
         selectedBrand={selectedBrand}
         onSelect={handleSelectBrand}
       />
-      <Products
+      <ProductList
         isLoading={analogues.isLoading}
         error={analogues.error}
         data={analogues.data}
         brand={selectedBrand}
       />
-    </PageContainer>
+    </>
   )
 }
-
-export default SearchPage

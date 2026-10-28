@@ -1,1 +1,1 @@
-export { Main as Manufacturers } from './ui/main'
+export { ManufacturerList } from './ui/manufacturer-list'

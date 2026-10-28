@@ -32,7 +32,6 @@ const searchSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // новый артикул: бренд и аналоги от прошлого артикула сбрасываются
       .addCase(loadManufacturers.pending, (_, { meta }) => ({
         ...initialState,
         manufacturers: loadingRequest(meta.requestId),
