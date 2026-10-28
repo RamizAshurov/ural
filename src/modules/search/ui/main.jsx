@@ -1,8 +1,8 @@
-import styles from './Form.module.scss'
+import styles from './main.module.scss'
 
 const MIN_QUERY_LENGTH = 3
 
-function Form({ value, onChange }) {
+export function Main({ value, onChange }) {
   return (
     <form className={styles.form} onSubmit={(event) => event.preventDefault()}>
       <label htmlFor="article" className={styles.label}>
@@ -20,5 +20,3 @@ function Form({ value, onChange }) {
     </form>
   )
 }
-
-export default Form

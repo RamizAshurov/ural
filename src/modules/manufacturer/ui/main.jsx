@@ -1,7 +1,7 @@
-import Card from '../Card/Card.jsx'
-import styles from './List.module.scss'
+import Card from './card'
+import styles from './main.module.scss'
 
-function List({ isLoading, error, data, search, selectedBrand, onSelect }) {
+export function Main({ isLoading, error, data, search, selectedBrand, onSelect }) {
   if (isLoading) return <p>Ищем производителей…</p>
   if (error) return <p className={styles.error}>{error.message}</p>
   if (!data) return null
@@ -22,5 +22,3 @@ function List({ isLoading, error, data, search, selectedBrand, onSelect }) {
     </ul>
   )
 }
-
-export default List

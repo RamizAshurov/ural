@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react'
-import PageContainer from '../components/PageContainer/PageContainer.jsx'
-import SearchForm from '../modules/search/Form/Form.jsx'
-import ManufacturerList from '../modules/manufacturer/List/List.jsx'
-import ProductList from '../modules/product/List/List.jsx'
-import { useDebounce } from '../hooks/useDebounce.js'
-import { useFetching } from '../hooks/useFetching.js'
-import { fetchAnalogues, fetchManufacturers } from '../api/service.js'
+import { PageContainer } from '@shared/components'
+import { SearchForm } from '@modules/search'
+import { Manufacturers } from '@modules/manufacturer'
+import { Products } from '@modules/product'
+import { useDebounce, useFetching } from '@shared/hooks'
+import { fetchAnalogues, fetchManufacturers } from '@api/service.js'
 import styles from './SearchPage.module.scss'
 
 const MIN_QUERY_LENGTH = 3
@@ -43,7 +42,7 @@ function SearchPage() {
     <PageContainer>
       <h1 className={styles.title}>Поиск автозапчастей и аналогов</h1>
       <SearchForm value={search} onChange={setSearch} />
-      <ManufacturerList
+      <Manufacturers
         isLoading={isLoadingManufacturers}
         error={manufacturersError}
         data={manufacturersData}
@@ -51,7 +50,7 @@ function SearchPage() {
         selectedBrand={selectedBrand}
         onSelect={handleSelectBrand}
       />
-      <ProductList
+      <Products
         isLoading={isLoadingAnalogues}
         error={analoguesError}
         data={analoguesData}
